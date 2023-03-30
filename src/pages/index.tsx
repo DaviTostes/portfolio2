@@ -1,4 +1,3 @@
-import getImg from '@/api/getImg'
 import styles from '@/styles/Home.module.css'
 import { useEffect, useState } from 'react'
 
@@ -8,16 +7,26 @@ import {IoLogoHtml5} from 'react-icons/io'
 import {IoLogoCss3} from 'react-icons/io'
 import {SiReact} from 'react-icons/si'
 
+import getRepos from '@/api/getRepos'
+import getImg from '@/api/getImg'
+import Projects from '@/components/projects'
+
 
 export default function Home() {
   const [Img, setImg] = useState('')
+  const [repos, setRepos] = useState([])
 
   useEffect(() => {
     const awaitGetImg = async () => {
       setImg(await getImg())
     }
 
+    const awaitGetRepos = async  () => {
+      setRepos(await getRepos())
+    }
+
     awaitGetImg()
+    awaitGetRepos()
   }, [])
 
   return (
@@ -48,6 +57,17 @@ export default function Home() {
             <SiReact className={styles.techLogo}/>
             <p>React</p>
           </div>
+        </div>
+        <h2 className={styles.h2}>Projects</h2>
+        <div className={styles.projects}>
+          {repos.map((repo : {name: string, homepage: string, language: string}, index) => 
+            <Projects
+              key={index}
+              name={repo.name}
+              homepage={repo.homepage}
+              language={repo.language}
+            />
+          )}
         </div>
       </div>
     </div>
